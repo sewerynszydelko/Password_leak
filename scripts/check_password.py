@@ -35,7 +35,10 @@ def check_passwords_strength(passwords: str) -> bool:
     return list_of_conditions
 
 
-print(check_passwords_strength(["Placki123!"]))
+print(check_passwords_strength(read_file_paswords()))
+
+def save_safe_passwords(paswods:list):
+    ...
 
 """
 test = "Placki123!"
