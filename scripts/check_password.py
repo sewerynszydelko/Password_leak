@@ -35,13 +35,14 @@ def check_passwords_strength(passwords: str) -> bool:
     return list_of_conditions
 
 
-print(check_passwords_strength(read_file_paswords()))
+def save_safe_passwords(passwords: list, path: str):
+    with open(path, mode="a", encoding="utf-8") as file:
+        for pas in passwords:
+            file.writelines(pas+'\n')
 
-def save_safe_passwords(paswods:list):
-    ...
 
 """
-test = "Placki123!"
+test = "Example1!"
 letter_list = [s for s in test]
 digits_list = [d for d in string.digits]
 print(letter_list)
