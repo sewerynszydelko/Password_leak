@@ -1,2 +1,6 @@
 scripts/passwords.txt
+scripts/safe_pass.txt
+__pycache__
+tests/.pytest_cashe
+my_venv
 .vscode
