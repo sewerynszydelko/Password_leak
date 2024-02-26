@@ -10,8 +10,8 @@ def test_read_file_is_list():
     assert type(test_list) is list
 
 
-def test_check_password_list_of_bool():
+def test_check_password_list():
 
-    test_bool_list = check_passwords_strength(["Example1!"])
+    test_bool_list = check_passwords_strength(["Example1!", "example1"])
 
-    assert test_bool_list == [True, True, True, True, True]
+    assert test_bool_list == ["Example1!"]
