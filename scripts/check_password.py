@@ -1,5 +1,18 @@
 """ Main file for red passowrd and save it if it's safe """
 import string
+from requests import get
+from hashlib import sha1
+
+
+def hashe_words(password_list: list[str]) -> hash:
+    haseble_list = []
+    for word in password_list:
+        h_word = sha1(word.encode("utf-8"))
+        haseble_list.append(h_word.hexdigest())
+
+    return haseble_list
+    # TODO Make Class Pasword_cahnge
+    ...
 
 
 def read_file_paswords(path="passwords.txt") -> list:
