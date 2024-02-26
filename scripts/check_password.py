@@ -9,11 +9,14 @@ def read_file_paswords(path="passwords.txt") -> list:
     return passwords_list
 
 
-def check_passwords_strength(passwords: str) -> bool:
+def check_passwords_strength(passwords: list[str]) -> list[bool]:
 
-    list_of_conditions = [False, False, False, False, False]
+    safe_pass = []
 
     for password in passwords:
+
+        list_of_conditions = [False, False, False, False, False]
+
         if len(password) >= 8:
             list_of_conditions[0] = True
 
@@ -32,20 +35,13 @@ def check_passwords_strength(passwords: str) -> bool:
         else:
             return False
 
-    return list_of_conditions
+        if all(list_of_conditions):
+            safe_pass.append(password)
+
+    return safe_pass
 
 
 def save_safe_passwords(passwords: list, path: str):
     with open(path, mode="a", encoding="utf-8") as file:
         for pas in passwords:
             file.writelines(pas+'\n')
-
-
-"""
-test = "Example1!"
-letter_list = [s for s in test]
-digits_list = [d for d in string.digits]
-print(letter_list)
-print(digits_list)
-print(any(d.isdigit() for d in test))
-"""
