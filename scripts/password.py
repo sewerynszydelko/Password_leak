@@ -9,6 +9,7 @@ class Password:
     def __init__(self) -> None:
         self.user_input_passwords = []
         self.safe_pass = []
+        self.hased_words = []
 
     def get_user_input(self) -> str:
         while True:
@@ -44,13 +45,13 @@ class Password:
             if all(list_of_conditions):
                 self.safe_pass.append(password)
 
-    def hashe_words(self: list[str]) -> hash:
+    def hashe_words(self) -> hash:
         haseble_list = []
         for word in self.safe_pass:
             h_word = sha1(word.encode("utf-8"))
             haseble_list.append(h_word.hexdigest())
 
-        return haseble_list
+        self.hased_words.extend(haseble_list)
 
 
 def read_file_paswords(path="passwords.txt") -> list:
@@ -64,10 +65,3 @@ def save_safe_passwords(passwords: list, path: str):
     with open(path, mode="a", encoding="utf-8") as file:
         for pas in passwords:
             file.writelines(pas+'\n')
-
-my_pass = Password()
-
-my_pass.get_user_input()
-my_pass.check_passwords_strength()
-print(my_pass.user_input_passwords)
-print(my_pass.safe_pass)
