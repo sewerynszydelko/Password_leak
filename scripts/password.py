@@ -41,22 +41,16 @@ class Password:
                             if any(leter in string.punctuation for leter in password):
                                 list_of_conditions[4] = True
 
-            else:
-                return False
-
             if all(list_of_conditions):
                 self.safe_pass.append(password)
 
+    def hashe_words(self: list[str]) -> hash:
+        haseble_list = []
+        for word in self.safe_pass:
+            h_word = sha1(word.encode("utf-8"))
+            haseble_list.append(h_word.hexdigest())
 
-def hashe_words(password_list: list[str]) -> hash:
-    haseble_list = []
-    for word in password_list:
-        h_word = sha1(word.encode("utf-8"))
-        haseble_list.append(h_word.hexdigest())
-
-    return haseble_list
-    # TODO Make Class Pasword_cahnge
-    ...
+        return haseble_list
 
 
 def read_file_paswords(path="passwords.txt") -> list:
