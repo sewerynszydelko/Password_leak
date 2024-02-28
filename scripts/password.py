@@ -5,13 +5,19 @@ from hashlib import sha1
 
 
 class Password:
+    """ Class for pasword checking and saving """
 
     def __init__(self) -> None:
         self.user_input_passwords = []
         self.safe_pass = []
         self.hased_words = []
+        self.password_list_readed = []
 
     def get_user_input(self) -> str:
+        """ Allows get user input savce in obj
+        Returns:
+            str: save user passwords in list in obj
+        """
         while True:
             try:
                 user_input = input("Pleas enter you'r passwords: ").split(' ')
@@ -22,6 +28,10 @@ class Password:
 
 
     def check_passwords_strength(self) -> list[str]:
+        """ Check if password pass 5 levels of passwod strenght
+        Returns:
+            list[str]: save passwod that safle fulfils all conditions
+        """
 
         for password in self.user_input_passwords:
 
@@ -45,7 +55,12 @@ class Password:
             if all(list_of_conditions):
                 self.safe_pass.append(password)
 
+
     def hashe_words(self) -> hash:
+        """ Hashed words in obj safe words
+        Returns:
+            hash: hashed words
+        """
         haseble_list = []
         for word in self.safe_pass:
             h_word = sha1(word.encode("utf-8"))
@@ -54,14 +69,30 @@ class Password:
         self.hased_words.extend(haseble_list)
 
 
-def read_file_paswords(path="passwords.txt") -> list:
-    with open(path, mode="r", encoding="utf-8") as file:
-        passwords_list = file.readlines()
+    def read_file_paswords(self,path="passwords.txt") -> list:
+        """ Read file with passwod from txt file
+        Args:
+            path (str, optional): path to file. Defaults to "passwords.txt".
+        Returns:
+            list: extend obj passwod_list_readed
+        """
+        with open(path, mode="r", encoding="utf-8") as file:
+            passwords_list = file.readlines()
 
-    return passwords_list
+        return self.password_list_readed.extend(passwords_list)
 
 
-def save_safe_passwords(passwords: list, path: str):
-    with open(path, mode="a", encoding="utf-8") as file:
-        for pas in passwords:
-            file.writelines(pas+'\n')
+    @staticmethod
+    def save_safe_passwords(passwords: list, path: str):
+        """ Saves passwod in file
+        Args:
+            passwords (list): lit with passwods
+            path (str): path to file were save
+        """
+        with open(path, mode="a", encoding="utf-8") as file:
+            for pas in passwords:
+                file.writelines(pas+'\n')
+
+
+if __name__ == "__main__":
+    pass
