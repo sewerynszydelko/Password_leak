@@ -12,6 +12,7 @@ class Password:
         self.safe_pass = []
         self.hased_words = []
         self.password_list_readed = []
+        self.number_of_powned_dict = {}
 
     def get_user_input(self) -> str:
         """ Allows get user input savce in obj
@@ -92,6 +93,26 @@ class Password:
         with open(path, mode="a", encoding="utf-8") as file:
             for pas in passwords:
                 file.writelines(pas+'\n')
+
+
+    def pwned_checkt_count(self, url) -> int:
+        count_of_powned = 0
+        dickt_powned = {}
+
+        for digit in self.hased_words:
+            count_of_powned = 0
+
+            response = get(url+digit[:5])
+
+            if response == 400:
+                dickt_powned[digit] = 0
+
+            for iterate, data in enumerate(response.text.split()):
+                count_of_powned += int(data[-1])
+            
+            dickt_powned[digit] = count_of_powned
+
+        self.number_of_powned_dict = dickt_powned
 
 
 if __name__ == "__main__":
