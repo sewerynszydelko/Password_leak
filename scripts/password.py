@@ -25,8 +25,8 @@ class Password:
                 self.user_input_passwords.extend(user_input)
                 break
             except ValueError as error:
-                print(f"Wrong input: {error}\n Pleas after sentence enter space")
-
+                print(f"Wrong input: {
+                      error}\n Pleas after sentence enter space")
 
     def check_passwords_strength(self) -> list[str]:
         """ Check if password pass 5 levels of passwod strenght
@@ -56,7 +56,6 @@ class Password:
             if all(list_of_conditions):
                 self.safe_pass.append(password)
 
-
     def hashe_words(self) -> hash:
         """ Hashed words in obj safe words
         Returns:
@@ -65,12 +64,11 @@ class Password:
         haseble_list = []
         for word in self.safe_pass:
             h_word = sha1(word.encode("utf-8"))
-            haseble_list.append(h_word.hexdigest())
+            haseble_list.append(h_word.hexdigest().upper())
 
         self.hased_words.extend(haseble_list)
 
-
-    def read_file_paswords(self,path="passwords.txt") -> list:
+    def read_file_paswords(self, path="passwords.txt") -> list:
         """ Read file with passwod from txt file
         Args:
             path (str, optional): path to file. Defaults to "passwords.txt".
@@ -81,7 +79,6 @@ class Password:
             passwords_list = file.readlines()
 
         return self.password_list_readed.extend(passwords_list)
-
 
     @staticmethod
     def save_safe_passwords(passwords: list, path: str):
@@ -94,8 +91,13 @@ class Password:
             for pas in passwords:
                 file.writelines(pas+'\n')
 
-
-    def pwned_checkt_count(self, url) -> int:
+    def pwned_checkt_count(self, url: str) -> int:
+        """ Check is pasword been powned in "have i been ponwed site"
+        Args:
+            url (str): url - adres to api
+        Returns:
+            int: number of powned password save in obj
+        """
         count_of_powned = 0
         dickt_powned = {}
 
@@ -109,11 +111,19 @@ class Password:
 
             for iterate, data in enumerate(response.text.split()):
                 count_of_powned += int(data[-1])
-            
+
             dickt_powned[digit] = count_of_powned
 
         self.number_of_powned_dict = dickt_powned
 
 
 if __name__ == "__main__":
-    pass
+
+    url = "https://api.pwnedpasswords.com/range/"
+
+    my_pass = Password()
+    my_pass.user_input_passwords = ["Example1!"]
+    my_pass.safe_pass = ["Example1!"]
+    my_pass.hashe_words()
+    my_pass.pwned_checkt_count(url)
+    print(my_pass.number_of_powned_dict)
