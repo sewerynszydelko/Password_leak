@@ -1,13 +1,26 @@
 """ Main file for red passowrd and save it if it's safe """
 import string
+import logging
 from requests import get
 from hashlib import sha1
 
+logging.basicConfig(level=logging.INFO, filename="log.log", filemode="w",
+                    format="%(asctime)s - %(levelname)s - %(message)s")
+
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler("logs.log")
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+logger.info("Start of Code")
 
 class Password:
     """ Class for pasword checking and saving """
 
     def __init__(self) -> None:
+        logger.info("Initalize Password Class")
         self.user_input_passwords = []
         self.safe_pass = []
         self.hased_words = []
@@ -21,10 +34,12 @@ class Password:
         """
         while True:
             try:
+                logging.info("Geting user input")
                 user_input = input("Pleas enter you'r passwords: ").split(' ')
                 self.user_input_passwords.extend(user_input)
                 break
             except ValueError as error:
+                logger.warning("Wrong input by user: "+error)
                 print(f"Wrong input: {
                       error}\n Pleas after sentence enter space")
 
@@ -55,18 +70,26 @@ class Password:
 
             if all(list_of_conditions):
                 self.safe_pass.append(password)
+                logger.info("Password Pass all condiotion added to safe")
+
+        if self.safe_pass == []:
+            logger.warning("No save password pass , returns false")
+            print("Non of your password is safe enught!")
+            return False
 
     def hashe_words(self) -> hash:
         """ Hashed words in obj safe words
         Returns:
             hash: hashed words
         """
+        logger.info("Started hased sentence")
         haseble_list = []
         for word in self.safe_pass:
             h_word = sha1(word.encode("utf-8"))
             haseble_list.append(h_word.hexdigest().upper())
 
         self.hased_words.extend(haseble_list)
+        logger.info("finished hashed")
 
     def read_file_paswords(self, path="passwords.txt") -> list:
         """ Read file with passwod from txt file
@@ -77,6 +100,7 @@ class Password:
         """
         with open(path, mode="r", encoding="utf-8") as file:
             passwords_list = file.readlines()
+            logger.info("Password readed from file")
 
         return self.password_list_readed.extend(passwords_list)
 
@@ -90,6 +114,7 @@ class Password:
         with open(path, mode="a", encoding="utf-8") as file:
             for pas in passwords:
                 file.writelines(pas+'\n')
+                logger.info("File save")
 
     def pwned_checkt_count(self, url: str) -> int:
         """ Check is pasword been powned in "have i been ponwed site"
@@ -101,6 +126,7 @@ class Password:
         count_of_powned = 0
         dickt_powned = {}
 
+        logger.info("Started check for powned password")
         for digit in self.hased_words:
             count_of_powned = 0
 
@@ -108,6 +134,7 @@ class Password:
 
             if response == 400:
                 dickt_powned[digit] = 0
+                logger.info("Password dons't powned")
 
             for iterate, data in enumerate(response.text.split()):
                 count_of_powned += int(data[-1])
@@ -115,6 +142,7 @@ class Password:
             dickt_powned[digit] = count_of_powned
 
         self.number_of_powned_dict = dickt_powned
+
 
 
 if __name__ == "__main__":
