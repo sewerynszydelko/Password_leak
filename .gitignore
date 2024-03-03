@@ -1,5 +1,7 @@
 scripts/passwords.txt
 scripts/safe_pass.txt
+scripts/log.log
+scripts/logs.log
 __pycache__
 tests/.pytest_cashe
 my_venv
