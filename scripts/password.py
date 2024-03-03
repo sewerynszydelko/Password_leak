@@ -14,7 +14,8 @@ formatter = logging.Formatter(
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-logger.info("Start of Code")
+logger.info("\nStart of Script\n")
+
 
 class Password:
     """ Class for pasword checking and saving """
@@ -104,15 +105,14 @@ class Password:
 
         return self.password_list_readed.extend(passwords_list)
 
-    @staticmethod
-    def save_safe_passwords(passwords: list, path: str):
+    def save_safe_passwords(self, path: str):
         """ Saves passwod in file
         Args:
             passwords (list): lit with passwods
             path (str): path to file were save
         """
         with open(path, mode="a", encoding="utf-8") as file:
-            for pas in passwords:
+            for pas in self.hased_words:
                 file.writelines(pas+'\n')
                 logger.info("File save")
 
@@ -143,6 +143,8 @@ class Password:
 
         self.number_of_powned_dict = dickt_powned
 
+    def show_number_powned(self):
+        print(f"Your password been powned: {self.number_of_powned_dict[self.hased_words[0]]} times")
 
 
 if __name__ == "__main__":
@@ -150,8 +152,9 @@ if __name__ == "__main__":
     url = "https://api.pwnedpasswords.com/range/"
 
     my_pass = Password()
-    my_pass.user_input_passwords = ["Example1!"]
-    my_pass.safe_pass = ["Example1!"]
+    my_pass.get_user_input()
+    my_pass.check_passwords_strength()
     my_pass.hashe_words()
     my_pass.pwned_checkt_count(url)
-    print(my_pass.number_of_powned_dict)
+    my_pass.show_number_powned()
+    my_pass.save_safe_passwords("safe_pass.txt")
