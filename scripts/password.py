@@ -1,8 +1,8 @@
 """ Main file for red passowrd and save it if it's safe """
 import string
 import logging
-from requests import get
 from hashlib import sha1
+from requests import get
 
 logging.basicConfig(level=logging.INFO, filename="log.log", filemode="w",
                     format="%(asctime)s - %(levelname)s - %(message)s")
@@ -40,11 +40,11 @@ class Password:
                 self.user_input_passwords.extend(user_input)
                 break
             except ValueError as error:
-                logger.warning("Wrong input by user: "+error)
+                logger.warning("Wrong input by user ValueError")
                 print(f"Wrong input: {
                       error}\n Pleas after sentence enter space")
 
-    def check_passwords_strength(self) -> list[str]:
+    def check_passwords_strength(self) -> list:
         """ Check if password pass 5 levels of passwod strenght
         Returns:
             list[str]: save passwod that safle fulfils all conditions
@@ -73,7 +73,7 @@ class Password:
                 self.safe_pass.append(password)
                 logger.info("Password Pass all condiotion added to safe")
 
-        if self.safe_pass == []:
+        if not self.safe_pass:
             logger.warning("No save password pass , returns false")
             print("Non of your password is safe enught!")
             return False
@@ -130,13 +130,13 @@ class Password:
         for digit in self.hased_words:
             count_of_powned = 0
 
-            response = get(url+digit[:5])
+            response = get(url+digit[:5],timeout=7)
 
             if response == 400:
                 dickt_powned[digit] = 0
                 logger.info("Password dons't powned")
 
-            for iterate, data in enumerate(response.text.split()):
+            for _, data in enumerate(response.text.split()):
                 count_of_powned += int(data[-1])
 
             dickt_powned[digit] = count_of_powned
@@ -144,17 +144,19 @@ class Password:
         self.number_of_powned_dict = dickt_powned
 
     def show_number_powned(self):
+        """Shows numbers of powned acual password
+        """
         print(f"Your password been powned: {self.number_of_powned_dict[self.hased_words[0]]} times")
 
 
 if __name__ == "__main__":
 
-    url = "https://api.pwnedpasswords.com/range/"
+    URL = "https://api.pwnedpasswords.com/range/"
 
     my_pass = Password()
     my_pass.get_user_input()
     my_pass.check_passwords_strength()
     my_pass.hashe_words()
-    my_pass.pwned_checkt_count(url)
+    my_pass.pwned_checkt_count(URL)
     my_pass.show_number_powned()
     my_pass.save_safe_passwords("safe_pass.txt")
