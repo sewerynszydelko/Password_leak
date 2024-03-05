@@ -12,12 +12,14 @@ def test_api_method(requests_mock):
     Args:
         requests_mock (_type_): mocking request for test
     """
+    # given
     test_password = Password()
     test_password.safe_pass = ["Example1!"]
     test_password.hashe_words()
-
+    
+    # when
     requests_mock.get(url+test_hashe[:5], text=answear)
     test_password.pwned_checkt_count(url)
-    print(test_password.number_of_powned_dict)
 
+    # then
     assert test_password.number_of_powned_dict[test_hashe] == 4
