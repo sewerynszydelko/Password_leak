@@ -111,6 +111,9 @@ class Password:
             passwords (list): lit with passwods
             path (str): path to file were save
         """
+        if not self.hased_words:
+            return False
+
         with open(path, mode="a", encoding="utf-8") as file:
             for pas in self.hased_words:
                 file.writelines(pas+'\n')
@@ -127,26 +130,30 @@ class Password:
         dickt_powned = {}
 
         logger.info("Started check for powned password")
-        for digit in self.hased_words:
+        for hashe in self.hased_words:
             count_of_powned = 0
 
-            response = get(url+digit[:5],timeout=7)
+            response = get(url+hashe[:5], timeout=7)
 
             if response == 400:
-                dickt_powned[digit] = 0
+                dickt_powned[hashe] = 0
                 logger.info("Password dons't powned")
 
-            for _, data in enumerate(response.text.split()):
-                count_of_powned += int(data[-1])
+            for line in response.text.splitlines():
+                found_hash, number_powned = line.split(":")
 
-            dickt_powned[digit] = count_of_powned
+                if found_hash == hashe[5:]:
+                    count_of_powned += int(number_powned)
+
+            dickt_powned[hashe[:5]] = count_of_powned
 
         self.number_of_powned_dict = dickt_powned
 
     def show_number_powned(self):
         """Shows numbers of powned acual password
         """
-        print(f"Your password been powned: {self.number_of_powned_dict[self.hased_words[0]]} times")
+        print(f"Your password been powned: {
+              self.number_of_powned_dict[self.hased_words[0][:5]]} times")
 
 
 if __name__ == "__main__":
