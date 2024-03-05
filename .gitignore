@@ -3,6 +3,7 @@ scripts/safe_pass.txt
 scripts/log.log
 scripts/logs.log
 logs.log
+log.log
 __pycache__
 tests/.pytest_cashe
 my_venv
