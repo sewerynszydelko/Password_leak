@@ -17,6 +17,10 @@ logger.addHandler(handler)
 logger.info("\nStart of Script\n")
 
 
+class ValidationEror(Exception):
+    pass
+
+
 class Password:
     """ Class for pasword checking and saving """
 
@@ -76,7 +80,7 @@ class Password:
         if not self.safe_pass:
             logger.warning("No save password pass , returns false")
             print("Non of your password is safe enught!")
-            return False
+            raise ValidationEror("Pssword don't pass condiotns validations")
 
     def hashe_words(self) -> hash:
         """ Hashed words in obj safe words
